@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.inwoo.music.dao.MusicDAO">
+	<!-- 전체 음악 개수 조회 -->
+	<select id="selectCount" resultType="int">
+		select count(*) from music
+	</select>
+	<!-- 통합검색 조회 -->
+	<select id="selectByAll" parameterType="string" resultType="MusicVO">
+		SELECT * FROM music WHERE LOWER(NAME) LIKE CONCAT(CONCAT('%', LOWER(#{name})), '%') OR LOWER(ARTIST) LIKE CONCAT(CONCAT('%', LOWER(#{name})), '%') ORDER BY REGDATE desc
+	</select>
+	<!-- 제목으로 조회 -->
+	<select id="selectByName" parameterType="string" resultType="MusicVO">
+		SELECT * FROM music WHERE LOWER(NAME) LIKE CONCAT(CONCAT('%', LOWER(#{name})), '%') ORDER BY REGDATE desc
+	</select>
+	<!-- 가수명으로 조회 -->
+	<select id="selectByArtist" parameterType="string" resultType="MusicVO">
+		SELECT * FROM music WHERE LOWER(ARTIST) LIKE CONCAT(CONCAT('%', LOWER(#{name})), '%') ORDER BY REGDATE desc
+	</select>
+	
+	<!-- db에 중복된 음악이 있는지 확인. 나중에 이 결과가 0이 아니면 이미 들어있다는 것이므로, 추가되지 않도록 하면 됨 -->
+	<select id="selectMusicCount" parameterType="hashmap" resultType="int">
+		select count(*) from music where artist=#{artist} and name=#{name}
+	</select>
+	<!-- 저장 -->
+	<insert id="insert" parameterType="MusicVO">
+		insert into music 
+			(music_idx, url, artist, name) 
+		values
+			(music_idx_seq.nextval, #{url}, #{artist}, #{name})
+	</insert>
+	<!-- 수정 -->
+	<update id="update" parameterType="MusicVO">
+		update music set 
+			url=#{url}, artist=#{artist}, name=#{name}, totalCount=#{totalCount}, currentPage=#{currentPage} 
+		where 
+			music_idx=#{music_idx}
+	</update>
+	
+	<!-- 우선 내 음악목록에서 삭제 -->
+	<delete id="deleteCart" parameterType="int">
+		delete from music_cart where music_idx=#{music_idx}
+	</delete>
+	<!-- 다음으로 db에서 삭제 -->
+	<delete id="delete" parameterType="int">
+		delete from music where music_idx=#{music_idx}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.inwoo.music.dao.MemberDAO">
+	<!-- 회원가입 후 인증 시작 -->
+	<!-- id중복확인:id를 받아서 db에 저장된 그 id의 개수를 리턴 -->
+	<select id="selectUseridCount" parameterType="string" resultType="int">
+		select count(*) from member where userid=#{userid}
+	</select>
+	<!-- 저장 -->
+	<insert id="insert" parameterType="MemberVO">
+		insert into member
+			 (idx, userid, password, name, nickname, hp, birth, gender, zipcode, addr1, addr2)
+		values
+			 (member_idx_seq.nextval, #{userid}, #{password}, #{name}, #{nickname}, #{hp}, #{birth}, #{gender}, #{zipcode}, #{addr1}, #{addr2})
+	</insert>
+	<!-- 인증수정 -->
+	<update id="updateUse" parameterType="HashMap">
+		update member set use=#{use} where idx=#{idx}
+	</update>
+	<!-- user_role부여 -->
+	<insert id="userRole" parameterType="string">
+		INSERT INTO MEMBER_ROLES (role_idx,userid,role)  VALUES 
+		(member_role_idx_seq.nextval, #{userid}, 'ROLE_USER')
+	</insert>
+	<!-- member_role부여 -->
+	<insert id="memberRole" parameterType="string">
+		INSERT INTO MEMBER_ROLES (role_idx,userid,role)  VALUES 
+		(member_role_idx_seq.nextval, #{userid}, 'ROLE_MEMBER')
+	</insert>
+	<!-- 회원가입 후 인증 끝 -->
+	
+	
+	<!-- 로그인 후 유저가 사용하는 쿼리 시작 -->
+	<!-- id찾기 -->
+	<select id="selectUserid" parameterType="MemberVO" resultType="string">
+		select userid from member where name=#{name} and hp=#{hp}
+	</select>
+	<!-- 정보수정 -->
+	<update id="update" parameterType="MemberVO">
+		update member set
+			name=#{name}, nickname=#{nickname}, hp=#{hp}, zipcode=#{zipcode}, addr1=#{addr1}, addr2=#{addr2}
+		where
+			idx=#{idx}
+	</update>
+	<!-- 비번수정 -->
+	<update id="updatePassword" parameterType="HashMap">
+		update member set password=#{password} where idx=#{idx}
+	</update>
+	<!-- 로그인 후 유저가 사용하는 쿼리 끝 -->
+
+	
+	<!-- 관리자 페이지에서 사용하는 쿼리 시작 -->
+	<!-- 전체 레코드 개수 얻기 -->
+	<select id="selectCount" resultType="int">
+		select count(*) from member
+	</select>
+	<!-- 전체 레코드 얻기 -->
+	<select id="selectAllMember" resultType="MemberVO">
+		select * from member order by userid, regdate
+	</select>
+	<!-- member_roles테이블에서 role_admin을 가진 userid를 이용하여 member테이블에 있는 idx 얻기 -->
+	<select id="selectAdminIdx" resultType="string">
+		SELECT DISTINCT m.idx FROM MEMBER m, MEMBER_ROLES mr WHERE mr.ROLE ='ROLE_ADMIN' AND m.USERID = mr.USERID
+	</select>
+	<!-- idx로 1개 레코드 얻기 -->
+	<select id="selectByIdx" parameterType="int" resultType="MemberVO">
+		select * from member where idx=#{idx}
+	</select>
+	<!-- userid로 1개 레코드 얻기 -->
+	<select id="selectByUserid" parameterType="string" resultType="MemberVO">
+		select * from member where userid=#{userid}
+	</select>
+	<!-- userid로 검색 -->
+	<select id="searchByUserid" parameterType="string" resultType="MemberVO">
+		SELECT * FROM member WHERE LOWER(USERID) LIKE CONCAT(CONCAT('%', LOWER(#{userid})), '%') ORDER BY NAME, REGDATE
+	</select>
+	<!-- name으로 검색 -->
+	<select id="searchByName" parameterType="string" resultType="MemberVO">
+		SELECT * FROM member WHERE LOWER(NAME) LIKE CONCAT(CONCAT('%', LOWER(#{name})), '%') ORDER BY NAME, REGDATE
+	</select>
+	<!-- hp로 검색 -->
+	<select id="searchByHP" parameterType="string" resultType="MemberVO">
+		SELECT * FROM member WHERE HP LIKE CONCAT(CONCAT('%', #{hp}), '%') ORDER BY NAME, REGDATE
+	</select>
+	<!-- 1페이지 레코드 얻기 -->
+	<select id="selectList" parameterType="HashMap" resultType="MemberVO">
+		select 
+			Q.*
+		from
+			(select
+				rownum rnum, R.*
+			from
+				(select * from member order by userid) R
+			where
+				<![CDATA[ 
+					rownum<=#{endNo}
+				]]>
+			) Q
+		where
+			<![CDATA[ 
+				rnum>=#{startNo}
+			]]>
+	</select>
+	<!-- 완전삭제 -->
+	<delete id="delete" parameterType="int">
+		delete from member where idx=#{idx}
+	</delete>
+	<!-- 완전삭제하면서 member_roles테이블에 남아있는 회원 기록도 모두 삭제 -->
+	<delete id="deleteRoles" parameterType="string">
+		DELETE FROM MEMBER_ROLES WHERE USERID=#{userid}
+	</delete>
+	<!-- 관리자 페이지에서 사용하는 쿼리 끝 -->
+	
+	
+	<!-- member_roles테이블에서 userid에 따른 role구하기 -->
+	<select id="selectRoles" parameterType="string" resultType="string">
+		SELECT ROLE FROM MEMBER_ROLES WHERE userid=#{userid} order by role
+	</select>
+</mapper>

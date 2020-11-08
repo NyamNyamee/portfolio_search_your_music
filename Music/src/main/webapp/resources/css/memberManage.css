@@ -1,0 +1,68 @@
+body {
+	background: -webkit-linear-gradient(left, white, silver);
+}
+
+.headerIcon {
+	margin: 10px;
+}
+
+.header {
+	font-size: 30pt;
+	text-align: center;
+	margin-top: 20px;
+}
+
+.info {
+	font-size: 12pt;
+	text-align: right;
+	margin-right: 20px;
+	margin-bottom: 20px;
+}
+
+tr {
+	border: 1px solid gray;
+}
+
+td {
+	border: 1px solid gray;
+	margin: 5px;
+}
+
+.check {
+	padding: 10px;
+	width: 5%;
+}
+
+.id {
+	padding: 10px;
+	width: 25%;
+}
+
+.name {
+	padding: 10px;
+	width: 10%;
+}
+
+.cp {
+	padding: 10px;
+	width: 12%;
+}
+
+.sex {
+	padding: 10px;
+	width: 5%
+}
+
+.regDate {
+	padding: 10px;
+	width: 13%
+}
+
+.deleteMember {
+	padding: 10px;
+	width: 5%
+}
+
+.addCartBtn {
+	
+}

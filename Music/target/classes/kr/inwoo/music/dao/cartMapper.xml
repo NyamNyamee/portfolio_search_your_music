@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.inwoo.music.dao.CartDAO">
+	<!-- 음악목록 추가 -->
+	<insert id="insertCart" parameterType="CartVO">
+		insert into music_cart values(music_cart_idx_seq.nextval, #{userid}, #{music_idx})
+	</insert>
+	
+	<!-- 음악목록 조회 -->
+	<select id="selectCartList" parameterType="string" resultType="CartVO">
+		select 
+			mc.cart_idx,
+			mc.userid,
+			m.music_idx,
+			m.url,
+			m.artist,
+			m.name,
+			m.regDate
+		from 
+			member mb, music m, music_cart mc
+		where
+			mb.userid = mc.userid AND
+			m.music_idx = mc.music_idx AND
+			mc.userid = #{userid}
+		order by
+			m.name
+	</select>
+	
+	<!-- 음악목록에 중복된 음악이 있는지 확인. 나중에 이 결과가 0이 아니면 이미 들어있다는 것이므로, 추가되지 않도록 하면 됨 -->
+	<select id="selectCartCount" parameterType="hashmap" resultType="int">
+		select count(*) from music_cart where userid=#{userid} and music_idx=#{music_idx}
+	</select>
+	
+	<!-- 음악목록 1개 삭제 -->
+	<delete id="deleteCart" parameterType="int">
+		delete from music_cart where cart_idx=#{cart_idx}
+	</delete>
+	
+	<!-- 음악목록 비우기 -->
+	<delete id="deleteAllCart" parameterType="string">
+		DELETE FROM MUSIC_CART WHERE USERID=#{userid}
+	</delete>
+</mapper>

@@ -1,0 +1,75 @@
+body {
+	background: -webkit-linear-gradient(left, white, silver);
+}
+
+.headerIcon {
+	margin: 10px;
+}
+
+#time {
+	font-size: 15pt;
+	margin-left: 10px;	
+}
+
+.header {
+	font-size: 30pt;
+	text-align: center;
+	margin: 20px;
+}
+
+.title {
+	text-align: right;
+	margin-right: 30px;
+}
+
+.search {
+	text-align: center;
+	margin-bottom: 5px;
+}
+
+.login {
+	text-align: center;
+}
+
+.logout {
+	text-align: center;
+}
+
+.memberInfo {
+	text-align: right;
+	margin-right: 30px;
+}
+
+#searchBtn {
+	width: 100px;
+}
+
+#searchBtn2 {
+	width: 100px;
+}
+
+#loginBtn {
+	width: 100px;
+}
+
+#musicCart {
+	width: 100px;
+}
+
+#logoutBtn {
+	width: 100px;
+}
+
+footer {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	height: 70px;
+	width: 100%;
+	padding: 15px 0;
+	margin-top: 15px;
+	text-align: center;
+	color: white;
+	background: gray;
+	font-size: 10pt;
+}
