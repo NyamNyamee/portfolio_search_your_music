@@ -36,6 +36,7 @@ $(function(){
 			$("#password2").focus();
 			return false;
 		}
+		
 		// 비번과 비번확인이 일치하는지 검사
 		if($("#password").val()!=$("#password2").val()){
 			alert('PW mismatched');

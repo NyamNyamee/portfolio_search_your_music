@@ -115,7 +115,7 @@ public class MemberController
 			StringBuffer sb = new StringBuffer();
 			sb.append("Hi " + username + "!<br>");
 			sb.append("Click this link to use your ID<br>");
-			sb.append("<a href='http://localhost:8080/music/useOk");
+			sb.append("<a href='http://localhost:8081/music/useOk");
 			sb.append("?userid=" + URLEncoder.encode(memberVO.getUserid(),"UTF-8") + "'>Enroll complete</a>");
 			emailService.sendMail(memberVO.getUserid(), "SYM - Welcome " + username + "!", sb.toString()); // (받는이메일, 제목, 내용)
 		} catch (UnsupportedEncodingException e) {

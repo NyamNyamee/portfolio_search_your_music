@@ -20,7 +20,7 @@ $(function () {
 			// alert("회원들의 idx와 그것이 관리자 아이디인지 판단하는 값(-1이면 거짓)=" + idxList[i] + "," + adminIdxList.indexOf(idxList[i]));
 			if(adminIdxList.indexOf(idxList[i]) >= 0) // adminIdxList에 idxList[i]가 존재하지 않는다면 -1을 리턴하므로 0 이상이면 존재한단 뜻임
 			{
-				$('.userIdx' + idxList[i]).css('background-color', '#DCEBFF'); // 한개만 적용되도 클래스이기 때문에 일괄적용됨. 이를 수정해야 함
+				$('.userIdx' + idxList[i]).css('background-color', '#DCEBFF'); // 해당 idx가 있는 열에 배경색 지정
 			}
 		}
 	});
